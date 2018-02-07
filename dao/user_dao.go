@@ -38,6 +38,8 @@ func init() {
 func AddUser(user model.User) (result bool, err error) {
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
+	//最后关系连接
+	defer db.Close()
 	checkError(err)
 
 	//插入数据
@@ -59,6 +61,8 @@ func GetUser(id int) (user model.User, err error) {
 
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
+	//最后关系连接
+	defer db.Close()
 	checkError(err)
 
 	//查询数据
@@ -67,8 +71,7 @@ func GetUser(id int) (user model.User, err error) {
 	fmt.Println("id = ", id)
 	err = stmt.QueryRow(id).Scan(&user.Id, &user.Name, &user.Password, &user.Email)
 	checkError(err)
-	fmt.Println(user)
-	db.Close()
+
 	return user, err
 }
 
@@ -79,6 +82,8 @@ func GetUsers() (users []model.User, err error) {
 	users = make([]model.User, 0)
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
+	//最后关系连接
+	defer db.Close()
 	checkError(err)
 
 	//查询数据
@@ -93,7 +98,7 @@ func GetUsers() (users []model.User, err error) {
 		users = append(users, user)
 
 	}
-	db.Close()
+
 	return users, err
 
 }
@@ -104,6 +109,8 @@ func GetUsers() (users []model.User, err error) {
 func DeleteUser(id int) (result bool, err error) {
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
+	//最后关系连接
+	defer db.Close()
 	checkError(err)
 	//删除数据
 	stmt, err := db.Prepare("delete from user where id=?")
@@ -115,7 +122,7 @@ func DeleteUser(id int) (result bool, err error) {
 	checkError(err)
 
 	fmt.Println(affect)
-	db.Close()
+
 	return affect > 0, err
 }
 
