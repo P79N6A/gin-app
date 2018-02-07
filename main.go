@@ -4,6 +4,13 @@ package main
 import (
 	"net/http"
 
+	//	"./dao"
+	//	"./model"
+	"fmt"
+	"log"
+	"strconv"
+
+	"./service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -60,42 +67,107 @@ func main() {
 	{
 		api_user_router.GET("/get", getUser)
 		api_user_router.GET("/list", listUser)
+		api_user_router.POST("/add", addUser)
+		api_user_router.GET("/delete", deleteUser)
 	}
 
 	router.Run()
 }
+func deleteUser(c *gin.Context) {
+	id := c.DefaultQuery("id", "0")
+	fmt.Println("id: ", id)
+	userId, err := strconv.Atoi(id)
+	result, err := service.DeleteUser(userId)
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data":    result,
+		})
+	} else {
+		log.Fatal(err)
+	}
+}
+func addUser(c *gin.Context) {
 
+	name := c.PostForm("name")
+	password := c.PostForm("password")
+	email := c.PostForm("email")
+	params := make(map[string]string)
+	params["name"] = name
+	params["password"] = password
+	params["email"] = email
+	res, err := service.AddUser(params)
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data":    res,
+		})
+	} else {
+		log.Fatal(err)
+	}
+
+}
 func getUser(c *gin.Context) {
 
-	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": "ok",
-		"data": map[string]string{
-			"name":     "bill",
-			"password": "111",
-			"email":    "bill@email.com",
-		},
-	})
+	/*
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data": map[string]string{
+				"name":     "bill",
+				"password": "111",
+				"email":    "bill@email.com",
+			},
+		})
+	*/
+	id := c.DefaultQuery("id", "0")
+	fmt.Println("id: ", id)
+	userId, err := strconv.Atoi(id)
+	user, err := service.GetUser(userId)
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data":    user,
+		})
+	} else {
+		log.Fatal(err)
+	}
 }
 
 func listUser(c *gin.Context) {
 
-	users := make([]map[string]string, 0)
-	m := map[string]string{
-		"name":     "bill",
-		"password": "111",
-		"email":    "bill@email.com",
-	}
-	users = append(users, m)
+	/*
+		users := make([]map[string]string, 0)
+		m := map[string]string{
+			"name":     "bill",
+			"password": "111",
+			"email":    "bill@email.com",
+		}
+		users = append(users, m)
 
-	users = append(users, map[string]string{
-		"name":     "bing",
-		"password": "222",
-		"email":    "bing@email.com",
-	})
-	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": "ok",
-		"data":    users,
-	})
+		users = append(users, map[string]string{
+			"name":     "bing",
+			"password": "222",
+			"email":    "bing@email.com",
+		})
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data":    users,
+		})
+	*/
+	users, err := service.GetUsers()
+	fmt.Println(users, err)
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    0,
+			"message": "ok",
+			"data":    users,
+		})
+	} else {
+		log.Fatalln(err)
+	}
 }
