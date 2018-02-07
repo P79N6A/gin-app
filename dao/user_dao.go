@@ -32,6 +32,9 @@ func init() {
 	jdbcUrl = userName + ":" + password + "@(" + host + ":" + strconv.Itoa(port) + ")/" + database + "?charset=utf8"
 }
 
+/**
+添加用户
+*/
 func AddUser(user model.User) (result bool, err error) {
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
@@ -48,6 +51,10 @@ func AddUser(user model.User) (result bool, err error) {
 
 	return affect > 0, err
 }
+
+/**
+获取用户
+*/
 func GetUser(id int) (user model.User, err error) {
 
 	//打开连接
@@ -65,6 +72,9 @@ func GetUser(id int) (user model.User, err error) {
 	return user, err
 }
 
+/**
+获取用户列表
+*/
 func GetUsers() (users []model.User, err error) {
 	users = make([]model.User, 0)
 	//打开连接
@@ -88,6 +98,9 @@ func GetUsers() (users []model.User, err error) {
 
 }
 
+/**
+删除用户
+*/
 func DeleteUser(id int) (result bool, err error) {
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)

@@ -4,8 +4,6 @@ package main
 import (
 	"net/http"
 
-	//	"./dao"
-	//	"./model"
 	"fmt"
 	"log"
 	"strconv"
@@ -62,6 +60,7 @@ func main() {
 
 	})
 
+	//api路由组
 	api_router := router.Group("/api")
 	api_user_router := api_router.Group("/user")
 	{
@@ -73,6 +72,10 @@ func main() {
 
 	router.Run()
 }
+
+/**
+删除用户处理器
+*/
 func deleteUser(c *gin.Context) {
 	id := c.DefaultQuery("id", "0")
 	fmt.Println("id: ", id)
@@ -88,6 +91,10 @@ func deleteUser(c *gin.Context) {
 		log.Fatal(err)
 	}
 }
+
+/**
+添加用户处理器
+*/
 func addUser(c *gin.Context) {
 
 	name := c.PostForm("name")
@@ -109,6 +116,10 @@ func addUser(c *gin.Context) {
 	}
 
 }
+
+/**
+获取用户处理器
+*/
 func getUser(c *gin.Context) {
 
 	/*
@@ -137,6 +148,9 @@ func getUser(c *gin.Context) {
 	}
 }
 
+/**
+获取用户处理器
+*/
 func listUser(c *gin.Context) {
 
 	/*
