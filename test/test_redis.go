@@ -6,14 +6,16 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func main() {
+func test2() {
+	// 新建客户端连接
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
 
-	// 连接服务器
+	defer client.Close()
+	// 连接服务器测试
 	pong, err := client.Ping().Result()
 	fmt.Println(pong, err)
 
