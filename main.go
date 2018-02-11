@@ -8,9 +8,9 @@ import (
 	"log"
 	"strconv"
 
-	"./service"
 	"github.com/gin-gonic/gin"
 )
+import userService "./service"
 
 func main() {
 
@@ -81,7 +81,7 @@ func deleteUser(c *gin.Context) {
 	id := c.DefaultQuery("id", "0")
 	fmt.Println("id: ", id)
 	userId, err := strconv.Atoi(id)
-	result, err := service.DeleteUser(userId)
+	result, err := userService.DeleteUser(userId)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
@@ -105,7 +105,7 @@ func addUser(c *gin.Context) {
 	params["name"] = name
 	params["password"] = password
 	params["email"] = email
-	res, err := service.AddUser(params)
+	res, err := userService.AddUser(params)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
@@ -137,7 +137,7 @@ func getUser(c *gin.Context) {
 	id := c.DefaultQuery("id", "0")
 	fmt.Println("id: ", id)
 	userId, err := strconv.Atoi(id)
-	user, err := service.GetUser(userId)
+	user, err := userService.GetUser(userId)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
@@ -174,7 +174,7 @@ func listUser(c *gin.Context) {
 			"data":    users,
 		})
 	*/
-	users, err := service.GetUsers()
+	users, err := userService.GetUsers()
 	fmt.Println(users, err)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
