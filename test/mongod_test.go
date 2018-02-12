@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"testing"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -13,11 +14,13 @@ type Person struct {
 	Phone string
 }
 
-func main() {
+func TestMongod(t *testing.T) {
 	// 建立一个会话
 	session, err := mgo.Dial("127.0.0.1:27017")
 	if err != nil {
 		panic(err)
+		t.Fail()
+
 	}
 	// 延迟最后关系会话
 	defer session.Close()
@@ -42,4 +45,5 @@ func main() {
 	}
 
 	fmt.Println("Phone:", result.Phone)
+	t.Log(result)
 }
