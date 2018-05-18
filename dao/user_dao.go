@@ -8,7 +8,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"../model"
+	"gin-app/model"
 )
 
 //用户名

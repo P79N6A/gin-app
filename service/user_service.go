@@ -1,8 +1,8 @@
 package service
 
 import (
-	"../dao"
-	"../model"
+	"gin-app/dao"
+	"gin-app/model"
 )
 
 func init() {}

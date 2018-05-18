@@ -4,13 +4,11 @@ package main
 import (
 	"net/http"
 
-	"fmt"
-	"log"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 )
-import userService "./service"
+import (
+	"gin-app/action"
+)
 
 func main() {
 
@@ -65,124 +63,18 @@ func main() {
 	api_router := router.Group("/api")
 	api_user_router := api_router.Group("/user")
 	{
-		api_user_router.GET("/get", getUser)
-		api_user_router.GET("/list", listUser)
-		api_user_router.POST("/add", addUser)
-		api_user_router.GET("/delete", deleteUser)
+		api_user_router.GET("/get", action.GetUser)
+		api_user_router.GET("/list", action.ListUser)
+		api_user_router.POST("/add", action.AddUser)
+		api_user_router.GET("/delete", action.DeleteUser)
+	}
+	api_people_router := api_router.Group("/people")
+	{
+		api_people_router.GET("/get", action.GetPeople)
+		api_people_router.GET("/list", action.ListPeople)
+		api_people_router.POST("/add", action.AddPeople)
+		api_people_router.GET("/delete", action.DeletePeople)
 	}
 
 	router.Run()
-}
-
-/**
-删除用户处理器
-*/
-func deleteUser(c *gin.Context) {
-	id := c.DefaultQuery("id", "0")
-	fmt.Println("id: ", id)
-	userId, err := strconv.Atoi(id)
-	result, err := userService.DeleteUser(userId)
-	if err == nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data":    result,
-		})
-	} else {
-		log.Fatal(err)
-	}
-}
-
-/**
-添加用户处理器
-*/
-func addUser(c *gin.Context) {
-
-	name := c.PostForm("name")
-	password := c.PostForm("password")
-	email := c.PostForm("email")
-	params := make(map[string]string)
-	params["name"] = name
-	params["password"] = password
-	params["email"] = email
-	res, err := userService.AddUser(params)
-	if err == nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data":    res,
-		})
-	} else {
-		log.Fatal(err)
-	}
-
-}
-
-/**
-获取用户处理器
-*/
-func getUser(c *gin.Context) {
-
-	/*
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data": map[string]string{
-				"name":     "bill",
-				"password": "111",
-				"email":    "bill@email.com",
-			},
-		})
-	*/
-	id := c.DefaultQuery("id", "0")
-	fmt.Println("id: ", id)
-	userId, err := strconv.Atoi(id)
-	user, err := userService.GetUser(userId)
-	if err == nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data":    user,
-		})
-	} else {
-		log.Fatal(err)
-	}
-}
-
-/**
-获取用户处理器
-*/
-func listUser(c *gin.Context) {
-
-	/*
-		users := make([]map[string]string, 0)
-		m := map[string]string{
-			"name":     "bill",
-			"password": "111",
-			"email":    "bill@email.com",
-		}
-		users = append(users, m)
-
-		users = append(users, map[string]string{
-			"name":     "bing",
-			"password": "222",
-			"email":    "bing@email.com",
-		})
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data":    users,
-		})
-	*/
-	users, err := userService.GetUsers()
-	fmt.Println(users, err)
-	if err == nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "ok",
-			"data":    users,
-		})
-	} else {
-		log.Fatalln(err)
-	}
 }
