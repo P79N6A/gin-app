@@ -8,9 +8,16 @@ import (
 )
 import (
 	"gin-app/action"
+	"gopkg.in/ini.v1"
+	"github.com/mgutz/logxi/v1"
+	"fmt"
 )
 
 func main() {
+	conf,err:=ini.Load("/Users/zhangbingbing/go/src/gin-app/config/db.conf")
+	log.Info("-----{}----{}---",conf, err)
+	fmt.Println(conf.SectionStrings(),err)
+	fmt.Println(conf.Section("database"),conf.Section("database").Keys())
 
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
