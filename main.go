@@ -3,21 +3,18 @@ package main
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
-)
-import (
 	"gin-app/action"
-	"gopkg.in/ini.v1"
-	"github.com/mgutz/logxi/v1"
+	"gin-app/library/logger"
+	"gin-app/library/config"
 	"fmt"
 )
 
+var mylog logger.BLog = logger.GetLogger()
+
 func main() {
-	conf,err:=ini.Load("/Users/zhangbingbing/go/src/gin-app/config/db.conf")
-	log.Info("-----{}----{}---",conf, err)
-	fmt.Println(conf.SectionStrings(),err)
-	fmt.Println(conf.Section("database"),conf.Section("database").Keys())
+	fmt.Println(config.GetLogConfig())
+	fmt.Println(config.GetAppConfig())
 
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")

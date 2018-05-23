@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"log"
 	"gin-app/service"
+	"gin-app/library/logger"
 )
 
+var mylog logger.BLog = logger.GetLogger()
 /**
 删除用户处理器
 */
@@ -24,7 +25,7 @@ func DeletePeople(c *gin.Context) {
 			"data":    result,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 }
 
@@ -45,7 +46,7 @@ func AddPeople(c *gin.Context) {
 			"data":    res,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 
 }
@@ -65,7 +66,7 @@ func GetPeople(c *gin.Context) {
 			"data":    user,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 }
 
@@ -74,9 +75,7 @@ func GetPeople(c *gin.Context) {
 */
 func ListPeople(c *gin.Context) {
 	users, err := service.GetPeoples()
-	fmt.Println(users, err)
-	//users := make([]model.User, 0)
-	//var err error
+	mylog.Debug(users)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
@@ -84,6 +83,6 @@ func ListPeople(c *gin.Context) {
 			"data":    users,
 		})
 	} else {
-		log.Fatalln(err)
+		mylog.Fatal(err)
 	}
 }

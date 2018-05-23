@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"log"
 	"gin-app/service"
 	"strconv"
 )
 
+//var mylog logger.BLog = logger.GetLogger()
 /**
 获取用户处理器
 */
@@ -35,7 +35,7 @@ func ListUser(c *gin.Context) {
 		})
 	*/
 	users, err := service.GetUsers()
-	fmt.Println(users, err)
+	mylog.Info(users)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
@@ -43,7 +43,7 @@ func ListUser(c *gin.Context) {
 			"data":    users,
 		})
 	} else {
-		log.Fatalln(err)
+		mylog.Fatal(err)
 	}
 }
 
@@ -62,7 +62,7 @@ func DeleteUser(c *gin.Context) {
 			"data":    result,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 }
 
@@ -86,7 +86,7 @@ func AddUser(c *gin.Context) {
 			"data":    res,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 
 }
@@ -118,6 +118,6 @@ func GetUser(c *gin.Context) {
 			"data":    user,
 		})
 	} else {
-		log.Fatal(err)
+		mylog.Fatal(err)
 	}
 }
