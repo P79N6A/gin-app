@@ -9,6 +9,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"gin-app/model"
+	"github.com/didi/gendry/manager"
+	"time"
+	"github.com/didi/gendry/scanner"
 )
 
 //用户名
@@ -27,9 +30,18 @@ const (
 //数据库连接串
 var jdbcUrl string
 
+var dbs *sql.DB
+
 //导入包完成后自动初始化
 func init() {
 	jdbcUrl = userName + ":" + password + "@(" + host + ":" + strconv.Itoa(port) + ")/" + database + "?charset=utf8"
+	dbs, _ = manager.New(database, userName, password, host).Set(
+		manager.SetCharset("utf-8"),
+		manager.SetAllowCleartextPasswords(true),
+		manager.SetInterpolateParams(true),
+		manager.SetTimeout(1*time.Second),
+		manager.SetReadTimeout(1*time.Second),
+	).Port(port).Open(true)
 }
 
 /**
@@ -101,6 +113,15 @@ func GetUsers() (users []model.User, err error) {
 
 	return users, err
 
+}
+
+func GetUserV2() ([]model.User, error) {
+
+	var users []model.User
+	rows, _ := dbs.Query("select * from user")
+	defer rows.Close()
+	_ = scanner.Scan(rows, &users)
+	return users, nil
 }
 
 /**

@@ -12,6 +12,7 @@ func init() {}
 */
 func GetUsers() (users []model.User, err error) {
 	users, err = dao.GetUsers()
+	//users, err = dao.GetUserV2()
 	return users, err
 }
 

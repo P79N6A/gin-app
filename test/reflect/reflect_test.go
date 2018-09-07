@@ -33,9 +33,22 @@ func TestReflect(t *testing.T) {
 		f := s.Field(i)
 		t.Logf("%d: %s %s = %v\n", i, typeofT.Field(i).Name, f.Type(), f.Interface())
 	}
+
+
+
+
 }
 
 type T struct {
 	A int
 	B string
+}
+
+func Test2(t *testing.T) {
+	var tss []T
+	ttt:=reflect.ValueOf(&tss)
+	tttArr:=reflect.MakeSlice(ttt.Elem().Type(),0, 3)
+	tobj:=reflect.New(tttArr.Elem().Type())
+	tttArr=reflect.Append(tttArr, tobj.Elem())
+	t.Log(tobj)
 }
