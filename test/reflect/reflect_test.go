@@ -3,6 +3,7 @@ package reflect
 import (
 	"testing"
 	"reflect"
+	"fmt"
 )
 
 func TestReflect(t *testing.T) {
@@ -44,11 +45,47 @@ type T struct {
 	B string
 }
 
+type INovel interface {
+	GetName()
+}
+
+type IBike interface{
+	GetColor()
+}
+
+type Book struct {
+}
+
+func (book Book) GetName() {
+	fmt.Println("test book")
+}
+
+type Bike struct {
+}
+
+func (bike *Bike) GetColor() {
+	fmt.Println("green")
+}
+
 func Test2(t *testing.T) {
-	var tss []T
-	ttt:=reflect.ValueOf(&tss)
-	tttArr:=reflect.MakeSlice(ttt.Elem().Type(),0, 3)
-	tobj:=reflect.New(tttArr.Elem().Type())
-	tttArr=reflect.Append(tttArr, tobj.Elem())
-	t.Log(tobj)
+	objMap := make(map[string]interface{})
+	objMap["book"] = Book{}
+	objMap["bike"] = Bike{}
+	t1 := reflect.TypeOf(objMap["book"])
+	book := reflect.New(t1)
+	obj := book.Elem().Interface().(Book)
+	obj.GetName()
+
+	t2 := reflect.TypeOf(objMap["bike"])
+	obj1 := reflect.New(t2)
+	bike := obj1.Elem().Interface().(Bike)
+	bike.GetColor()
+
+	var novel INovel
+	novel = Book{}
+	novel.GetName()
+
+	var bk IBike
+	bk=&Bike{}
+	bk.GetColor()
 }
