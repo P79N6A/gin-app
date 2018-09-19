@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package hello;
+
+message Request {
+    string name = 1;
+}
+
+message Response {
+    string message = 1;
+}
+
+service HelloService {
+    rpc SayHello (Request) returns (Response) {
+    }
+}
+
+message UserRequest {
+    int32 id = 1;
+}
+
+message UserResponse {
+    repeated User users = 1;
+}
+
+message User {
+    int32 id = 1;
+    string name = 2;
+    string password = 3;
+    string email = 4;
+}
+
+service UserService {
+    rpc GetUser (UserRequest) returns (UserResponse) {
+    }
+    rpc GetUsers (UserRequest) returns (UserResponse) {
+    }
+}
