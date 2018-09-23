@@ -4,6 +4,10 @@ import (
 	"net"
 	"fmt"
 	"os"
+	"bufio"
+	"encoding/binary"
+	"io"
+	"encoding/json"
 )
 
 func main() {
@@ -22,6 +26,7 @@ func main() {
 }
 
 func handleConnection(conn net.Conn) {
+	/*
 	buffer := make([]byte, 2048)
 	for {
 		n, err := conn.Read(buffer)
@@ -33,6 +38,19 @@ func handleConnection(conn net.Conn) {
 		conn.Write([]byte("had receive client message"))
 
 	}
+	*/
+	readerAndWriter := bufio.NewReadWriter(bufio.NewReader(conn), bufio.NewWriter(conn))
+	header := make([]byte, 4)
+	readerAndWriter.Read(header)
+	fmt.Println(string(header))
+	bodyLength := binary.BigEndian.Uint32(header)
+	fmt.Println("body length:", bodyLength)
+	bodyData:=make([]byte,bodyLength)
+	io.ReadFull(readerAndWriter,bodyData)
+	fmt.Println("body: ", string(bodyData))
+	var jstr map[string]interface{}
+	json.Unmarshal(bodyData,&jstr)
+	fmt.Println(jstr)
 }
 func checkError(err error) {
 	if err != nil {
