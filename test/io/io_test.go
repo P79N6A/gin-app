@@ -9,6 +9,8 @@ import (
 	"log"
 	"sort"
 	"runtime"
+	"container/list"
+	"fmt"
 )
 
 func TestAbc(logger *testing.T) {
@@ -55,4 +57,15 @@ func TestAbc(logger *testing.T) {
 
 type MyLog struct {
 	*log.Logger
+}
+
+func TestStr(t *testing.T) {
+	l:=list.New()
+	e4:=l.PushBack(4)
+	e1:=l.PushFront(1)
+	l.InsertBefore(3, e4)
+	l.InsertAfter(2, e1)
+	for e:=l.Front();e!=nil;e=e.Next(){
+		fmt.Println(e.Value)
+	}
 }
