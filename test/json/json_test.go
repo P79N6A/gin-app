@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"fmt"
 	"strconv"
+	"strings"
+	"io"
 )
 
 func Test_Json(t *testing.T) {
@@ -27,6 +29,29 @@ func Test_Json(t *testing.T) {
 		if err := enc.Encode(&v); err != nil {
 			t.Error(err)
 		}
+	}
+}
+
+func TestJson1(t *testing.T) {
+	const jsonStream = `
+		{"Name": "Ed", "Text": "Knock knock."}
+		{"Name": "Sam", "Text": "Who's there?"}
+		{"Name": "Ed", "Text": "Go fmt."}
+		{"Name": "Sam", "Text": "Go fmt who?"}
+		{"Name": "Ed", "Text": "Go fmt yourself!"}
+	`
+	type Mesasge struct {
+		Name, Text string
+	}
+	dec := json.NewDecoder(strings.NewReader(jsonStream))
+	for {
+		var m Mesasge
+		if err := dec.Decode(&m); err == io.EOF {
+			break
+		} else if err != nil {
+			t.Log(err)
+		}
+		t.Logf("%s: %s\n", m.Name, m.Text)
 	}
 }
 

@@ -50,6 +50,7 @@ func init() {
 func AddUser(user model.User) (result bool, err error) {
 	//打开连接
 	db, err := sql.Open("mysql", jdbcUrl)
+	db.SetMaxOpenConns(3)
 	//最后关系连接
 	defer db.Close()
 	checkError(err)

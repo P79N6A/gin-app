@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"encoding/csv"
+	"os"
 )
 
 func TestContext(t *testing.T) {
@@ -76,4 +78,45 @@ func watch2(ctx context.Context) {
 			time.Sleep(2 * time.Second)
 		}
 	}
+}
+
+func TestContext3(t *testing.T) {
+	//ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	go func(ctx context.Context) {
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Println("监控退出，停止了...")
+				return
+			default:
+				fmt.Println("go routine监控中...")
+				time.Sleep(2 * time.Second)
+			}
+		}
+	}(ctx)
+	time.Sleep(10 * time.Second)
+	fmt.Println("可以了，通知监控停止")
+	fmt.Println("before cancel")
+	cancel()
+	fmt.Println("after cancel")
+	time.Sleep(5 * time.Second)
+
+	fmt.Println("delete", len([]byte("delete")))
+}
+
+func TestCvs(t *testing.T) {
+	//data, _ := ioutil.ReadFile("./test.cvm")
+	//reader := bytes.NewBuffer(data)
+	file, _ := os.Open("./test.cvs")
+	defer file.Close()
+	cvsReader := csv.NewReader(file)
+	str, _ := cvsReader.ReadAll()
+	for _, line := range str {
+		for _, item := range line {
+			fmt.Print(item, " ")
+		}
+		fmt.Println()
+	}
+	fmt.Println(str)
 }

@@ -22,6 +22,7 @@ func TestEncrypt(t *testing.T) {
 	result = sha1Inst.Sum(nil)
 	t.Logf("%x\n\n", result)
 
+    t.Logf("%x",md5.Sum([]byte("hello,bill")))
 }
 func TestEncryptFile(t *testing.T) {
 	file := "123.txt"
