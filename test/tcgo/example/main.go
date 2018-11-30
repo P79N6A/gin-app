@@ -1,7 +1,9 @@
 package main
 
 /*
+//-I指定头文件目录
 #cgo CFLAGS: -I./foo
+//-L 指定引用库的目录,-l指定库名称
 #cgo LDFLAGS: -L./foo -lfoo
 #include "foo.h"
  */

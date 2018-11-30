@@ -1,6 +1,9 @@
 package encryption
 
 import (
+	"encoding/hex"
+	"fmt"
+	"strconv"
 	"testing"
 	"crypto/md5"
 	"crypto/sha1"
@@ -40,4 +43,14 @@ func TestEncryptFile(t *testing.T) {
 		io.Copy(shah, infile)
 		t.Logf("%x %s\n", shah.Sum(nil), file)
 	}
+}
+
+func TestSomeThing(t *testing.T)  {
+	fmt.Println(hex.EncodeToString([]byte("xxxxxxxxxxxxx")))
+	bookId:= "4295124692"
+	chapterId:="43084"
+	bookIdInt, _ := strconv.Atoi(bookId)
+	chapterIdInt, _ := strconv.Atoi(chapterId)
+	key := bookIdInt + (chapterIdInt << 32)
+	fmt.Println(key)
 }

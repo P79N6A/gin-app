@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os"
 	"encoding/json"
-	"testing"
-	"reflect"
 	"fmt"
+	"io"
+	"os"
+	"reflect"
 	"strconv"
 	"strings"
-	"io"
+	"testing"
 )
 
 func Test_Json(t *testing.T) {
@@ -53,6 +53,21 @@ func TestJson1(t *testing.T) {
 		}
 		t.Logf("%s: %s\n", m.Name, m.Text)
 	}
+	fmt.Println(uicodeToString("\\u7384\\u5e7b"))
+}
+func uicodeToString(text string) string {
+	unicodeArr := strings.Split(text, "\\u")
+	var context string
+	for _, v := range unicodeArr {
+		if len(v) < 1 {
+			continue
+		}
+		temp, err := strconv.ParseInt(v, 16, 32)
+		if err == nil {
+			context += fmt.Sprintf("%c", temp)
+		}
+	}
+	return context
 }
 
 type ICoupon interface {
@@ -111,4 +126,30 @@ func TestBean(t *testing.T) {
 		t.Log(handler)
 		handler.parse(val.([]interface{}))
 	}
+}
+
+func TestSome(t *testing.T) {
+
+	type people struct {
+		Age    int      `json:"age"`
+		Names  []string `json:"names"`
+		IsMale bool     `json:"is_male"`
+	}
+
+	m := map[string]interface{}{
+	// "age":     0,
+	// "names":   []string{"bill", "zhang"},
+	// "is_male": true,
+	}
+	by, err := json.Marshal(m)
+	var pe people
+	err = json.Unmarshal(by, &pe)
+	fmt.Println(pe, err)
+
+	var arr []string
+	fmt.Println(len(arr))
+	var a uint = 2
+	var b uint = 3
+	fmt.Println(reflect.TypeOf(a*b), reflect.TypeOf(b-1))
+
 }
