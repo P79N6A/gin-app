@@ -1,8 +1,9 @@
 package sockettest
 
 import (
-	"testing"
+	"math"
 	"net"
+	"testing"
 )
 
 func TestSocket(t *testing.T) {
@@ -10,4 +11,7 @@ func TestSocket(t *testing.T) {
 	t.Log(tcpAddr.Network())
 	t.Log(tcpAddr.String())
 	t.Log(tcpAddr.IP, tcpAddr.Port, tcpAddr.Zone)
+}
+func TestSome(t *testing.T) {
+	t.Log(int(math.Ceil(8 / float64(10))))
 }
