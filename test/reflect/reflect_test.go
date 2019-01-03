@@ -1,9 +1,10 @@
 package reflect
 
 import (
-	"testing"
-	"reflect"
 	"fmt"
+	"reflect"
+	"testing"
+	"unsafe"
 )
 
 func TestReflect(t *testing.T) {
@@ -35,9 +36,6 @@ func TestReflect(t *testing.T) {
 		t.Logf("%d: %s %s = %v\n", i, typeofT.Field(i).Name, f.Type(), f.Interface())
 	}
 
-
-
-
 }
 
 type T struct {
@@ -49,7 +47,7 @@ type INovel interface {
 	GetName()
 }
 
-type IBike interface{
+type IBike interface {
 	GetColor()
 }
 
@@ -86,6 +84,60 @@ func Test2(t *testing.T) {
 	novel.GetName()
 
 	var bk IBike
-	bk=&Bike{}
+	bk = &Bike{}
 	bk.GetColor()
+}
+
+type A struct {
+}
+
+func (p *A) Name() string {
+	return "I am A"
+}
+
+func (p *A) say() {
+	fmt.Println(p.Name())
+}
+
+func (p *A) sayReal(child interface{}) {
+	ref := reflect.ValueOf(child)
+	method := ref.MethodByName("Name")
+	if (method.IsValid()) {
+		r := method.Call(nil)
+		fmt.Println(r[0].String())
+	}
+}
+
+type B struct {
+	A
+}
+
+func (c *B) Name() string {
+	return "I am B"
+}
+
+func TestChild(t *testing.T) {
+	b := &B{}
+	b.say()
+	b.sayReal(b)
+
+	var data []B
+	fmt.Println(data, data == nil)
+	Console(data)
+
+}
+
+func Console(data interface{}) {
+	fmt.Println(data, data == nil, reflect.ValueOf(data).IsNil(), reflect.TypeOf(data))
+}
+
+func TestRe1(t *testing.T) {
+	tt := &T{}
+	fieldA, _ := reflect.TypeOf(tt).Elem().FieldByName("A")
+	fieldAPtr := uintptr(unsafe.Pointer(tt)) + fieldA.Offset
+	fmt.Println(fieldAPtr, unsafe.Pointer(fieldAPtr))
+	intVar := (*int)(unsafe.Pointer(fieldAPtr))
+	fmt.Println(intVar, reflect.TypeOf(intVar), reflect.TypeOf(fieldAPtr), tt.A)
+	*intVar = 1
+	fmt.Println(tt.A)
 }
