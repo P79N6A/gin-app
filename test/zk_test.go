@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/samuel/go-zookeeper/zk"
 	"time"
@@ -12,7 +13,7 @@ func connect() *zk.Conn {
 	must(err)
 	return conn
 }
-func main() {
+func TestZK(t *testing.T) {
 	// 新建客户端连接
 	conn := connect()
 	defer conn.Close()

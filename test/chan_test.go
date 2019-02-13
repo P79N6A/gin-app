@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"testing"
 )
 
 func fibonacci(n int, c chan int) {
@@ -14,7 +15,7 @@ func fibonacci(n int, c chan int) {
 	close(c)
 }
 
-func main() {
+func TestChan(t *testing.T) {
 	c := make(chan int, 100)
 	go fibonacci(cap(c), c)
 	for i := range c {

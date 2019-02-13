@@ -1,9 +1,9 @@
 package reflect
 
 import (
-	"testing"
-	"reflect"
 	"fmt"
+	"reflect"
+	"testing"
 )
 
 func TestReflect(t *testing.T) {
@@ -88,4 +88,19 @@ func Test2(t *testing.T) {
 	var bk IBike
 	bk=&Bike{}
 	bk.GetColor()
+}
+
+func TestSome(t *testing.T) {
+	var UIDArr []int
+	for idx := 0; idx < 1000; idx++ {
+		if idx > 0 && idx%100 == 0 && len(UIDArr) > 0 {
+			fmt.Println(UIDArr)
+			UIDArr = []int{}
+		}
+		UIDArr = append(UIDArr, idx)
+	}
+	if len(UIDArr) > 0 {
+		fmt.Println(UIDArr)
+
+	}
 }
