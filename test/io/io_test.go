@@ -1,16 +1,17 @@
 package io
 
 import (
-	"testing"
-	"os"
 	"bufio"
-	"io"
-	"strconv"
-	"log"
-	"sort"
-	"runtime"
 	"container/list"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"runtime"
+	"sort"
+	"strconv"
+	"strings"
+	"testing"
 )
 
 func TestAbc(logger *testing.T) {
@@ -60,12 +61,43 @@ type MyLog struct {
 }
 
 func TestStr(t *testing.T) {
-	l:=list.New()
-	e4:=l.PushBack(4)
-	e1:=l.PushFront(1)
+	l := list.New()
+	e4 := l.PushBack(4)
+	e1 := l.PushFront(1)
 	l.InsertBefore(3, e4)
 	l.InsertAfter(2, e1)
-	for e:=l.Front();e!=nil;e=e.Next(){
+	for e := l.Front(); e != nil; e = e.Next() {
 		fmt.Println(e.Value)
 	}
+}
+
+func TestAI(t *testing.T) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		c, err := reader.ReadString('\n')
+		if err == nil {
+			c = strings.Replace(c, "吗", "", -1)
+			c = strings.Replace(c, "?", "!", -1)
+			fmt.Println(c)
+		}
+	}
+
+}
+
+type Log struct {
+	App string
+}
+
+func (l *Log) Info(message ...string) {
+	fmt.Println(l.App, message)
+}
+
+type MyService struct {
+	*Log
+}
+
+func TestService(t *testing.T) {
+	service := &MyService{&Log{"Test"}}
+	service.Info("hello,bill",service.App)
+	log.Println()
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"reflect"
 	"strconv"
@@ -151,5 +152,6 @@ func TestSome(t *testing.T) {
 	var a uint = 2
 	var b uint = 3
 	fmt.Println(reflect.TypeOf(a*b), reflect.TypeOf(b-1))
+	t.Log("***",int(math.Ceil(8 / float64(10))))
 
 }
