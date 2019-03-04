@@ -155,4 +155,8 @@ func TestRe1(t *testing.T) {
 	fmt.Println(intVar, reflect.TypeOf(intVar), reflect.TypeOf(fieldAPtr), tt.A)
 	*intVar = 1
 	fmt.Println(tt.A)
+	var str string = "100000"
+	var istr int32 = 100000
+	var bstr byte = 1
+	fmt.Println(unsafe.Sizeof(str), unsafe.Sizeof(istr), unsafe.Sizeof(bstr))
 }
