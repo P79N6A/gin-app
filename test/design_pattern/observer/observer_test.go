@@ -43,17 +43,22 @@ func TestListener2(t *testing.T) {
 	time.Sleep(1 * time.Second)
 }
 
-type Shape struct {
+type base struct {
+	ID int
+}
+type shape struct {
+	base
 	Width  int
 	Height int
 }
 
 type AShape struct {
-	*Shape
+	shape
 	Name string
 }
 
 type BShape struct {
+	ID     int
 	Width  int
 	Height int
 	Name   string
@@ -61,6 +66,7 @@ type BShape struct {
 
 func TestSome(t *testing.T) {
 	a := &BShape{}
+	a.ID = 1
 	a.Name = "aa"
 	a.Width = 10
 	a.Height = 20
@@ -69,5 +75,14 @@ func TestSome(t *testing.T) {
 
 	var bb AShape
 	err = json.Unmarshal(bt, &bb)
-	log.Println(bb)
+	log.Println(bb, err, bb.Height, bb.Width, bb.Name)
+	log.Printf("%+v\n", bb)
+	bb.Width = 1
+	log.Printf("%+v\n", bb)
+	update(&bb)
+}
+func update(aShape *AShape) {
+	aShape.Height = 2
+	aShape.ID = 2
+	log.Printf("%+v\n", aShape)
 }

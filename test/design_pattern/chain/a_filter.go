@@ -11,7 +11,7 @@ type AFilter struct {
 	Filter
 }
 
-func (aFilter *AFilter) DoFilter() bool {
+func (aFilter *AFilter) DoFilter(obj ...interface{}) bool {
 	log.Println("a filter do filter...")
 	return true
 }

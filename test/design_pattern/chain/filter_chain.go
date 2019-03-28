@@ -22,7 +22,7 @@ func init() {
 	addFilter(&AFilter{})
 	addFilter(&BFilter{})
 }
-func (filterChain *DefaultFilterChain) DoFilter() bool {
+func (filterChain *DefaultFilterChain) DoFilter(obj ...interface{}) bool {
 	for _, filter := range filters {
 		ok := filter.DoFilter()
 		if !ok {

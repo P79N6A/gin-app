@@ -6,5 +6,5 @@
 package chain
 
 type Filter interface {
-	DoFilter() bool
+	DoFilter(obj ...interface{}) bool
 }
