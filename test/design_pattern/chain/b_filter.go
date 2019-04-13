@@ -11,7 +11,9 @@ type BFilter struct {
 	Filter
 }
 
-func (aFilter *BFilter) DoFilter(obj ...interface{}) bool{
-	log.Println("b filter do filter...")
+func (aFilter *BFilter) DoFilter(chain FilterChain, obj ...interface{}) bool {
+	log.Println("before b filter do filter...")
+	chain.DoFilter(obj)
+	log.Println("after b filter do filter...")
 	return true
 }

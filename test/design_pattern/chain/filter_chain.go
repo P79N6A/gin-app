@@ -5,32 +5,41 @@
  */
 package chain
 
+import "log"
+
 type FilterChain interface {
-	Filter
+	DoFilter(obj ...interface{}) bool
+	init()
+	addFilter(filter Filter)
 }
 
 type DefaultFilterChain struct {
 	FilterChain
+	pos     int
+	count   int
+	filters []Filter
 }
 
-var (
-	filters                    []Filter
-	DefaultFilterChainInstance = &DefaultFilterChain{}
-)
-
-func init() {
-	addFilter(&AFilter{})
-	addFilter(&BFilter{})
+func NewDefaultFilterChain() *DefaultFilterChain {
+	chain := &DefaultFilterChain{}
+	chain.init()
+	return chain
 }
-func (filterChain *DefaultFilterChain) DoFilter(obj ...interface{}) bool {
-	for _, filter := range filters {
-		ok := filter.DoFilter()
-		if !ok {
-			break
-		}
+func (chain *DefaultFilterChain) init() {
+	chain.addFilter(&AFilter{})
+	chain.addFilter(&BFilter{})
+}
+func (chain *DefaultFilterChain) DoFilter(obj ...interface{}) bool {
+	if chain.pos < chain.count {
+		filter := chain.filters[chain.pos]
+		chain.pos++
+		filter.DoFilter(chain, nil)
+		return true
 	}
+	log.Println("all filter done...")
 	return true
 }
-func addFilter(filter Filter) {
-	filters = append(filters, filter)
+func (chain *DefaultFilterChain) addFilter(filter Filter) {
+	chain.count++
+	chain.filters = append(chain.filters, filter)
 }
