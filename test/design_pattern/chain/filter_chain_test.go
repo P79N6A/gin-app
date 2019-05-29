@@ -24,13 +24,22 @@ func TestSome(t *testing.T) {
 	name1 := "a"
 	name2 := []string{"b", "c"}
 	Names(name1, name2)
+	t1 := time.Now()
 	var randSigleton = rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < 10; i++ {
-		log.Println("---", randSigleton.Intn(3))
+		log.Println("---", randSigleton.Intn(10))
 	}
 	for i := 0; i < 10; i++ {
-		log.Println("***", rand.Intn(3))
+		log.Println("***", rand.Intn(10))
 	}
+
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 10; i++ {
+		log.Println("###", rand.Intn(10))
+	}
+	elapsed := time.Since(t1)
+	log.Println("take ", elapsed.Seconds()*1000)
+	log.Println(time.Now().UnixNano())
 }
 
 type AA struct {
